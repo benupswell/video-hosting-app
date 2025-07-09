@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Hosting Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .video-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        video {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            border-radius: 8px;
+        }
+        .info {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        .url-info {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: monospace;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Video Hosting Test</h1>
+        
+        <div class="video-container">
+            <h2>Your Video</h2>
+            <video 
+                controls 
+                preload="auto" 
+                muted
+                playsinline
+                id="mainVideo"
+            >
+                <source src="assets/videos/video.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        
+        <div class="info">
+            <h3>Video Information</h3>
+            <p><strong>File:</strong> assets/videos/video.mp4</p>
+            <p><strong>Size:</strong> <span id="fileSize">Loading...</span></p>
+            <p><strong>Duration:</strong> <span id="duration">Loading...</span></p>
+            
+            <h3>Hosting URLs</h3>
+            <p>Once deployed, your video will be available at:</p>
+            <div class="url-info">
+                <strong>Netlify URL:</strong> https://your-app-name.netlify.app/assets/videos/video.mp4
+            </div>
+            <div class="url-info">
+                <strong>GitHub Pages URL:</strong> https://yourusername.github.io/video-hosting-app/assets/videos/video.mp4
+            </div>
+            
+            <h3>Usage in Your React Component</h3>
+            <p>Replace the current videoSrc with your hosted URL:</p>
+            <div class="url-info">
+                videoSrc="https://your-app-name.netlify.app/assets/videos/video.mp4"
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get video information
+        const video = document.getElementById('mainVideo');
+        
+        video.addEventListener('loadedmetadata', function() {
+            const duration = Math.round(video.duration);
+            const minutes = Math.floor(duration / 60);
+            const seconds = duration % 60;
+            document.getElementById('duration').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        });
+        
+        // Get file size (approximate)
+        fetch('assets/videos/video.mp4', {method: 'HEAD'})
+            .then(response => {
+                const size = response.headers.get('content-length');
+                if (size) {
+                    const sizeMB = (size / (1024 * 1024)).toFixed(2);
+                    document.getElementById('fileSize').textContent = `${sizeMB} MB`;
+                } else {
+                    document.getElementById('fileSize').textContent = 'Unknown';
+                }
+            })
+            .catch(() => {
+                document.getElementById('fileSize').textContent = 'Unknown';
+            });
+    </script>
+</body>
+</html>

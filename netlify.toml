@@ -1,0 +1,30 @@
+[build]
+  # No build command needed for static site
+  publish = "."
+
+[[headers]]
+  # Apply headers to all video files
+  for = "/assets/videos/*"
+  [headers.values]
+    # Enable CORS for video files
+    Access-Control-Allow-Origin = "*"
+    # Cache video files for 1 year
+    Cache-Control = "public, max-age=31536000"
+    # Correct MIME type for MP4 videos
+    Content-Type = "video/mp4"
+
+[[headers]]
+  # Apply headers to HTML files
+  for = "/*.html"
+  [headers.values]
+    # Security headers
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[redirects]]
+  # Redirect root to index.html
+  from = "/"
+  to = "/index.html"
+  status = 200 
